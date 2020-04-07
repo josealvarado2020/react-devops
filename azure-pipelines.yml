@@ -5,7 +5,7 @@ stages:
   jobs:
   - job: build
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'windows-latest'
 
     steps:
     - task: NodeTool@0
@@ -42,7 +42,7 @@ stages:
   jobs:
   - deployment: deploy
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'windows-latest'
     variables:
       storageaccountname: joseteststorage
     environment: 'Deploy to Storage Test'
