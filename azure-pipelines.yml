@@ -16,13 +16,11 @@ stages:
     - task: Npm@1
       displayName: 'npm install'
       inputs:
-        workingDir: 'react-devops'
         command: install
 
     - task: Npm@1
       displayName: 'npm build'
       inputs:
-        workingDir: 'react-devops'
         command: custom
         customCommand: run-script build
         
@@ -30,7 +28,7 @@ stages:
     - task: CopyFiles@2
       displayName: 'Copy Files'
       inputs:
-        SourceFolder: 'react-devops\build'
+        SourceFolder: 'build'
         TargetFolder: '$(build.artifactstagingdirectory)'
         CleanTargetFolder: true
 
