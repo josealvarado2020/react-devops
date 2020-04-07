@@ -1,0 +1,31 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+stages:
+- stage: deploy
+  jobs:
+  - deployment: deploy
+    pool:
+      vmImage: 'windows-latest'
+    variables:
+      storageaccountname: joseprodstorage
+    environment: 'Deploy to Storage Prod'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: build
+            
+          - task: AzureFileCopy@3
+            inputs:
+              sourcePath: $(Pipeline.Workspace)/build
+              azureSubscription: 'JoseResourceManagerSubscription'
+              destination: azureBlob
+              storage: $(storageaccountname)
+              containerName: "$web"
