@@ -7,6 +7,42 @@ trigger:
 - master
 
 stages:
+- stage: build
+  jobs:
+  - job: build
+    pool:
+      vmImage: 'windows-latest'
+
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '10.x'
+      displayName: 'Install Node.js'
+
+    - task: Npm@1
+      displayName: 'npm install'
+      inputs:
+        command: install
+
+    - task: Npm@1
+      displayName: 'npm build'
+      inputs:
+        command: custom
+        customCommand: run-script build
+        
+
+    - task: CopyFiles@2
+      displayName: 'Copy Files'
+      inputs:
+        SourceFolder: 'build'
+        TargetFolder: '$(build.artifactstagingdirectory)'
+        CleanTargetFolder: true
+
+    - task: PublishBuildArtifacts@1      
+      inputs:
+        PathtoPublish: '$(build.artifactstagingdirectory)'
+        ArtifactName: 'build'
+
 - stage: deploy
   jobs:
   - deployment: deploy
